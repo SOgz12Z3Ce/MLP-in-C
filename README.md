@@ -85,6 +85,6 @@ int main()
 ```
 
 # 鸣谢
-感谢[3Blue1Brown 的深度学习系列][https://space.bilibili.com/88461692/lists/1528929?type=series]。
+感谢[3Blue1Brown 的深度学习系列](https://space.bilibili.com/88461692/lists/1528929?type=series)。
 
 感谢某两个人，虽然没帮我写代码但对我很好。（他们看到了自会知道说的是自己）
