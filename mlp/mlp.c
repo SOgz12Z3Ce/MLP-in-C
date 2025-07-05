@@ -204,10 +204,12 @@ static void mlp_net_grad(MLPNet *this, Vector *label, MLPGrad *grad)
 {
 	Vector *out = this->layer[this->size - 1]->out;
 	Vector *out_grad = this->dlossf(out, label);
+	Vector *tmp = out_grad;
 	for (size_t i = this->size; i-- > 0; ) {
 		backward(this->layer[i], grad->layer[i], out_grad);
 		out_grad = grad->layer[i]->node;
 	}
+	tmp->free(tmp);
 }
 
 static void mlp_net_update(MLPNet *this, MLPGrad *grad)
@@ -272,9 +274,9 @@ static void mlp_grad_scale(MLPGrad *this, double scalar)
 
 /**
  * @brief 反向传播
- * @param net      网络层
- * @param grad     梯度层
- * @param out_grad 输出层梯度
+ * @param net      `[IN]`网络层
+ * @param grad     `[INOUT]`梯度层
+ * @param out_grad `[IN]`输出层梯度
  */
 static void backward(FCLayer *net, FCLayer *grad, Vector *out_grad)
 {

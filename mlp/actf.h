@@ -40,3 +40,23 @@ static inline double d_id(double x)
 {
 	return 1.0;
 }
+
+/**
+ * @brief  ReLU 函数
+ * @param  x 自变量
+ * @return ReLU(x)
+ */
+static inline double relu(double x)
+{
+	return x < 0 ? 0 : x;
+}
+
+/**
+ * @brief  ReLU 函数的导函数
+ * @param  x 自变量
+ * @return ReLU'(x)
+ */
+static inline double d_relu(double x)
+{
+	return x < 0 ? 0 : 1;
+}

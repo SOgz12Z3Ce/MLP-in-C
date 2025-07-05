@@ -19,7 +19,7 @@ size_t res(Vector *out);
 #define TRAIN_SIZE 60000
 #define BATCH_SIZE 100
 #define BATCH_NUM TRAIN_SIZE / BATCH_SIZE - 1
-#define LEARNING_RATE 1
+#define LEARNING_RATE 5
 #define TEST_SIZE 10000
 
 #define NET_SIZE 4

@@ -209,5 +209,8 @@ Matrix *outer(Vector *v1, Vector *v2)
 	}
 
 	Matrix *ret = new_matrix(row, col, ret_val);
+	for (size_t i = 0; i < col; i++)
+		ret_val[i]->free(ret_val[i]);
+	free(ret_val);
 	return ret;
 }
