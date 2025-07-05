@@ -17,13 +17,13 @@ size_t *rand_queue();
 size_t res(Vector *out);
 
 #define TRAIN_SIZE 60000
-#define BATCH_SIZE 114
+#define BATCH_SIZE 100
 #define BATCH_NUM TRAIN_SIZE / BATCH_SIZE - 1
-#define LEARNING_RATE 0.514
+#define LEARNING_RATE 1
 #define TEST_SIZE 10000
 
-size_t net_size = 4;
-size_t layer_size[4] = {784, 16, 16, 10};
+#define NET_SIZE 4
+size_t layer_size[NET_SIZE] = {784, 16, 16, 10};
 
 int main()
 {
@@ -41,10 +41,10 @@ int main()
 	FCLayer *hidden_layer_2 = new_fc_layer(layer_size[1], layer_size[2],
 	                                       NULL, NULL, sigmoid, d_sigmoid);
 	FCLayer *output_layer = new_fc_layer(layer_size[2], layer_size[3],
-	                                     NULL, NULL, id, d_id);
+	                                     NULL, NULL, sigmoid, d_sigmoid);
 	FCLayer *layer[3] = {hidden_layer_1, hidden_layer_2, output_layer};
-	MLPNet *net = new_mlp_net(net_size - 1, layer,
-	                          softmax_ce_loss, d_softmax_ce_loss);
+	MLPNet *net = new_mlp_net(NET_SIZE - 1, layer,
+	                          mse_loss, d_mse_loss);
 	MLPGrad *grad_tmp = new_mlp_grad(net);
 	MLPGrad *grad = new_mlp_grad(net);
 	net->init_xavier(net);
