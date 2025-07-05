@@ -23,6 +23,7 @@ aux_source_directory(path/to/mlp SRC_LIST)
 mkdir build
 cd build
 cmake ..
+make
 ```
 运行`example/bin/demo`可训练网络并测试效果。
 
