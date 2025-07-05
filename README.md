@@ -4,9 +4,9 @@
 
 ## 使用
 
-- `vector.h``Matrix.h`提供了基本的数学对象。
+- `vector.h` `Matrix.h`提供了基本的数学对象。
 - `mlp.h`提供了网络对象。
-- `actf.h``lossf.h``rand.h`提供了一些数学方法。
+- `actf.h` `lossf.h` `rand.h`提供了一些数学方法。
 具体用法见文件内注释。
 
 要在项目中使用，需指定`mlp`为 include 路径并添加到源文件列表，例如：
