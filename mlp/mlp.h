@@ -20,8 +20,8 @@ struct FCLayer {
 	Vector *bias;      /* 偏置 */
 	Vector *pre;       /* 线性变换结果 */
 	Vector *out;       /* 输出 */
-	double (*actf)(double x);   /* 激活函数 */
-	double (*dactf)(double x);  /* 激活函数的导函数 */
+	float (*actf)(float x);   /* 激活函数 */
+	float (*dactf)(float x);  /* 激活函数的导函数 */
 
 	/**
 	 * @brief 销毁`FCLayer`
@@ -55,7 +55,7 @@ struct FCLayer {
 	 * @brief 数乘
 	 * @param scalar 倍率
 	 */
-	void (*scale)(FCLayer *this, double scalar);
+	void (*scale)(FCLayer *this, float scalar);
 
 	/**
 	 * @brief  拷贝自身
@@ -75,15 +75,15 @@ struct FCLayer {
  * @return `FCLayer`指针
  */
 FCLayer *new_fc_layer(size_t size, size_t next_size, Matrix *weight,
-                      Vector *bias, double (*actf)(double),
-                      double (*dactf)(double));
+                      Vector *bias, float (*actf)(float),
+                      float (*dactf)(float));
 
 /***** MLPNet *****/
 
 struct MLPNet {
 	size_t size;      /* 不含输出层的层数 */
 	FCLayer **layer;  /* 层 */
-	double (*lossf)(Vector*, Vector*);    /* 损失函数 */
+	float (*lossf)(Vector*, Vector*);    /* 损失函数 */
 	Vector *(*dlossf)(Vector*, Vector*);  /* 损失函数的梯度函数 */
 
 	/**
@@ -124,7 +124,7 @@ struct MLPNet {
  * @param dloss 损失函数的导函数
  */
 MLPNet *new_mlp_net(size_t size, FCLayer **layer,
-                    double (*lossf)(Vector*, Vector*),
+                    float (*lossf)(Vector*, Vector*),
                     Vector *(*dlossf)(Vector*, Vector*));
 
 /***** MLPGrad *****/
@@ -154,7 +154,7 @@ struct MLPGrad
 	 * @brief 数乘
 	 * @param scalar 倍率
 	 */
-	void (*scale)(MLPGrad *this, double scalar);
+	void (*scale)(MLPGrad *this, float scalar);
 };
 
 /**

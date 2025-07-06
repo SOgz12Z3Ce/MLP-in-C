@@ -28,7 +28,7 @@ struct Matrix {
 	 * @param min 最小值
 	 * @param max 最大值
 	 */
-	void (*rand_uniform)(Matrix *this, double min, double max);
+	void (*rand_uniform)(Matrix *this, float min, float max);
 
 	/**
 	 * @brief 转置矩阵
@@ -57,7 +57,7 @@ struct Matrix {
 	 * @brief 数乘
 	 * @param scalar 倍率
 	 */
-	void (*scale)(Matrix *this, double scalar);
+	void (*scale)(Matrix *this, float scalar);
 
 	/**
 	 * @brief  拷贝自身

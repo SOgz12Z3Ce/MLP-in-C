@@ -9,12 +9,12 @@
 Matrix *new_matrix(size_t row, size_t col, Vector **val);
 static void matrix_free(Matrix *this);
 static void matrix_clear(Matrix *this);
-static void matrix_rand_uniform(Matrix *this, double min, double max);
+static void matrix_rand_uniform(Matrix *this, float min, float max);
 static void matrix_transpose(Matrix *this);
 static void matrix_act(Matrix *this, Vector *target);
 static void matrix_add(Matrix *this, Matrix *target);
 static void matrix_sub(Matrix *this, Matrix *target);
-static void matrix_scale(Matrix *this, double scalar);
+static void matrix_scale(Matrix *this, float scalar);
 static Matrix *matrix_copy(Matrix *this);
 static void matrix_print(Matrix *this, size_t dp);
 
@@ -73,7 +73,7 @@ void matrix_clear(Matrix *this)
 		this->val[i]->clear(this->val[i]);
 }
 
-void matrix_rand_uniform(Matrix *this, double min, double max)
+void matrix_rand_uniform(Matrix *this, float min, float max)
 {
 	for (size_t i = 0; i < this->col; i++)
 		this->val[i]->rand_uniform(this->val[i], min, max);
@@ -131,7 +131,7 @@ static void matrix_sub(Matrix *this, Matrix *target)
 		this->val[i]->sub(this->val[i], target->val[i]);
 }
 
-static void matrix_scale(Matrix *this, double scalar)
+static void matrix_scale(Matrix *this, float scalar)
 {
 	for (size_t i = 0; i < this->col; i++)
 		this->val[i]->scale(this->val[i], scalar);

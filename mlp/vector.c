@@ -8,15 +8,15 @@
 /***** 声明 *****/
 /*** 外部 ***/
 
-Vector *new_vector(size_t size, double *val);
+Vector *new_vector(size_t size, float *val);
 static void vector_free(Vector *this);
-static void vector_set(Vector *this, size_t size, double *val);
+static void vector_set(Vector *this, size_t size, float *val);
 static void vector_clear(Vector *this);
-static void vector_rand_uniform(Vector *this, double min, double max);
+static void vector_rand_uniform(Vector *this, float min, float max);
 static void vector_add(Vector *this, Vector *target);
 static void vector_sub(Vector *this, Vector *target);
-static void vector_scale(Vector *this, double scalar);
-static void vector_map(Vector *this, double (*func)(double));
+static void vector_scale(Vector *this, float scalar);
+static void vector_map(Vector *this, float (*func)(float));
 static Vector *vector_copy(Vector *this);
 static bool vector_has_negative(Vector *this);
 static size_t *vector_len(Vector *this, size_t dp);
@@ -25,23 +25,23 @@ static void vector_print(Vector *this, size_t dp);
 /*** 内部 ***/
 
 /**
- * @brief  获取一个`double`变量的打印长度
- * @param  x  `double`变量
+ * @brief  获取一个`float`变量的打印长度
+ * @param  x  `float`变量
  * @param  dp 小数精度
  * @return 长度
  */
-static size_t double_len(double x, size_t dp);
+static size_t float_len(float x, size_t dp);
 
 /***** 实现 *****/
 /*** 外部 ***/
 
-Vector *new_vector(size_t size, double *val)
+Vector *new_vector(size_t size, float *val)
 {
-	double *this_val = (double*)calloc(size, sizeof(double));
+	float *this_val = (float*)calloc(size, sizeof(float));
 	if (!this_val)
 		goto fail;
 	if (val)
-		memcpy(this_val, val, sizeof(double) * size);
+		memcpy(this_val, val, sizeof(float) * size);
 
 	Vector *this = (Vector*)malloc(sizeof(Vector));
 	if (!this)
@@ -75,16 +75,16 @@ static void vector_free(Vector *this)
 	free(this);
 }
 
-static void vector_set(Vector *this, size_t size, double *val)
+static void vector_set(Vector *this, size_t size, float *val)
 {
 	if (this->size != size) {
 		this->size = size;
 		free(this->val);
-		this->val = (double*)calloc(size, sizeof(double));
+		this->val = (float*)calloc(size, sizeof(float));
 		if (!this->val)
 			goto fail;
 	}
-	memcpy(this->val, val, sizeof(double) * size);
+	memcpy(this->val, val, sizeof(float) * size);
 	return;
 fail:
 	printf("Memory not enough!");
@@ -93,10 +93,10 @@ fail:
 
 static void vector_clear(Vector *this)
 {
-	memset(this->val, 0, sizeof(double) * this->size);
+	memset(this->val, 0, sizeof(float) * this->size);
 }
 
-static void vector_rand_uniform(Vector *this, double min, double max)
+static void vector_rand_uniform(Vector *this, float min, float max)
 {
 	for (size_t i = 0; i < this->size; i++)
 		this->val[i] = rand_uniform(min, max);
@@ -114,13 +114,13 @@ static void vector_sub(Vector *this, Vector *target)
 		this->val[i] -= target->val[i];
 }
 
-static void vector_scale(Vector *this, double scalar)
+static void vector_scale(Vector *this, float scalar)
 {
 	for (size_t i = 0; i < this->size; i++)
 		this->val[i] *= scalar;
 }
 
-static void vector_map(Vector *this, double (*func)(double))
+static void vector_map(Vector *this, float (*func)(float))
 {
 	for (size_t i = 0; i < this->size; i++)
 		this->val[i] = func(this->val[i]);
@@ -155,7 +155,7 @@ static size_t *vector_len(Vector *this, size_t dp)
 	
 	/* 计算长度 */
 	for (size_t i = 0; i < this->size; i++)
-		ret[i] = space[i] + double_len(this->val[i], dp);
+		ret[i] = space[i] + float_len(this->val[i], dp);
 
 	free(space);
 	return ret;
@@ -188,7 +188,7 @@ static void vector_print(Vector *this, size_t dp)
 }
 
 /*** 内部 ***/
-static size_t double_len(double x, size_t dp)
+static size_t float_len(float x, size_t dp)
 {
 	size_t len = 0;
 	if (signbit(x)) {
@@ -198,6 +198,6 @@ static size_t double_len(double x, size_t dp)
 	if (x < 1.0)
 		len += 1;
 	else
-		len += floor(log10(x)) + 1;
+		len += floor(log10f(x)) + 1;
 	return len + 1 + dp;
 }

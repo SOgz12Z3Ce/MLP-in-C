@@ -39,7 +39,7 @@ typedef struct Vector Vector
 
 struct Vector {
 	size_t size;  /* 长度 */
-	double *val;  /* 值 */
+	float *val;  /* 值 */
 
 	/**
 	 * @brief 销毁`Vector`
@@ -64,18 +64,18 @@ struct Vector {
  * @param  val  `[IN]`值，传入`NULL`以令初始值为`0`
  * @return `[OWN]``Vector`指针
  */
-Vector *new_vector(size_t size, double *val);
+Vector *new_vector(size_t size, float *val);
 ```
 ```c
 /* example.c */
 #include "vector.h"
 int main()
 {
-	double val1[2] = {-1.0, 2.0}
+	float val1[2] = {-1.0, 2.0}
 	Vector *v1 = new_vector(2, val1);
 
 
-	double val2[2] = {-2.0, 0.0}
+	float val2[2] = {-2.0, 0.0}
 	Vector *v2 = new_vector(2, val2);
 
 	v1->add(v1, v2);

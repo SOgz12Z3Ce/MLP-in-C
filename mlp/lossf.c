@@ -4,11 +4,11 @@
 /***** 声明 *****/
 /*** 外部 ***/
 
-double mse_loss(Vector *out, Vector *label);
+float mse_loss(Vector *out, Vector *label);
 Vector *d_mse_loss(Vector *out, Vector *label);
-double ce_loss(Vector *out, Vector *label);
+float ce_loss(Vector *out, Vector *label);
 Vector *d_ce_loss(Vector *out, Vector *label);
-double softmax_ce_loss(Vector *out, Vector *label);
+float softmax_ce_loss(Vector *out, Vector *label);
 Vector *d_softmax_ce_loss(Vector *out, Vector *label);
 
 /*** 内部 ***/
@@ -23,11 +23,11 @@ static Vector *softmax(Vector *x);
 /***** 实现 *****/
 /*** 外部 ***/
 
-double mse_loss(Vector *out, Vector *label)
+float mse_loss(Vector *out, Vector *label)
 {
-	double ret = 0.0;
+	float ret = 0.0;
 	for (size_t i = 0; i < out->size; i++)
-		ret += pow(out->val[i] - label->val[i], 2);
+		ret += powf(out->val[i] - label->val[i], 2);
 	return ret;
 }
 
@@ -39,11 +39,11 @@ Vector *d_mse_loss(Vector *out, Vector *label)
 	return ret;
 }
 
-double ce_loss(Vector *out, Vector *label)
+float ce_loss(Vector *out, Vector *label)
 {
-	double ret = 0.0;
+	float ret = 0.0;
 	for (size_t i = 0; i < out->size; i++)
-		ret -= label->val[i] * log(out->val[i]);
+		ret -= label->val[i] * logf(out->val[i]);
 	return ret;
 }
 
@@ -55,10 +55,10 @@ Vector *d_ce_loss(Vector *out, Vector *label)
 	return ret;
 }
 
-double softmax_ce_loss(Vector *out, Vector *label)
+float softmax_ce_loss(Vector *out, Vector *label)
 {
 	Vector *sm_out = softmax(out);
-	double ret = ce_loss(sm_out, label);
+	float ret = ce_loss(sm_out, label);
 	sm_out->free(sm_out);
 	return ret;
 }
@@ -78,8 +78,8 @@ Vector *d_softmax_ce_loss(Vector *out, Vector *label)
 static Vector *softmax(Vector *x)
 {
 	Vector *ret = x->copy(x);
-	ret->map(ret, exp);
-	double base = 0.0;
+	ret->map(ret, expf);
+	float base = 0.0;
 	for (size_t i = 0; i < x->size; i++)
 		base += ret->val[i];
 	ret->scale(ret, 1.0 / base);

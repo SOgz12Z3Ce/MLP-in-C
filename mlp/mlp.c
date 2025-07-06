@@ -10,18 +10,18 @@
 /*** 外部 ***/
 
 FCLayer *new_fc_layer(size_t size, size_t next_size, Matrix *weight,
-                      Vector *bias, double (*actf)(double),
-                      double (*dactf)(double));
+                      Vector *bias, float (*actf)(float),
+                      float (*dactf)(float));
 static void fc_layer_free(FCLayer *this);
 static void fc_layer_clear(FCLayer *this);
 static void fc_layer_forward(FCLayer *this, Vector *input);
 static void fc_layer_add(FCLayer *this, FCLayer *target);
 static void fc_layer_sub(FCLayer *this, FCLayer *target);
-static void fc_layer_scale(FCLayer *this, double scalar);
+static void fc_layer_scale(FCLayer *this, float scalar);
 static FCLayer *fc_layer_copy(FCLayer *this);
 
 MLPNet *new_mlp_net(size_t size, FCLayer **layer,
-                    double (*lossf)(Vector*, Vector*),
+                    float (*lossf)(Vector*, Vector*),
                     Vector *(*dlossf)(Vector*, Vector*));
 static void mlp_net_free(MLPNet *this);
 static void mlp_net_init_xavier(MLPNet *this);
@@ -33,7 +33,7 @@ MLPGrad *new_mlp_grad(MLPNet *net);
 static void mlp_grad_free(MLPGrad *this);
 static void mlp_grad_clear(MLPGrad *this);
 static void mlp_grad_add(MLPGrad *this, MLPGrad *target);
-static void mlp_grad_scale(MLPGrad *this, double scalar);
+static void mlp_grad_scale(MLPGrad *this, float scalar);
 
 /*** 内部 ***/
 
@@ -43,8 +43,8 @@ static void backward(FCLayer *net, FCLayer *grad, Vector *out_grad);
 /*** 外部 ***/
 
 FCLayer *new_fc_layer(size_t size, size_t next_size, Matrix *weight,
-                      Vector *bias, double (*actf)(double),
-                      double (*dactf)(double))
+                      Vector *bias, float (*actf)(float),
+                      float (*dactf)(float))
 {
 	Vector *this_node = new_vector(size, NULL);
 	Matrix *this_weight;
@@ -131,7 +131,7 @@ static void fc_layer_sub(FCLayer *this, FCLayer *target)
 	this->bias->sub(this->bias, target->bias);
 }
 
-static void fc_layer_scale(FCLayer *this, double scalar)
+static void fc_layer_scale(FCLayer *this, float scalar)
 {
 	this->weight->scale(this->weight, scalar);
 	this->bias->scale(this->bias, scalar);
@@ -144,7 +144,7 @@ static FCLayer *fc_layer_copy(FCLayer *this)
 }
 
 MLPNet *new_mlp_net(size_t size, FCLayer **layer,
-                    double (*lossf)(Vector*, Vector*),
+                    float (*lossf)(Vector*, Vector*),
                     Vector *(*dlossf)(Vector*, Vector*))
 {
 	FCLayer **this_layer = (FCLayer**)calloc(size, sizeof(FCLayer*));
@@ -185,7 +185,7 @@ static void mlp_net_init_xavier(MLPNet *this)
 {
 	for (size_t i = 0; i < this->size; i++) {
 		FCLayer *layer = this->layer[i];
-		double bound = sqrt(6.0 / (layer->size + layer->next_size));
+		float bound = sqrt(6.0 / (layer->size + layer->next_size));
 		layer->weight->rand_uniform(layer->weight, -bound , bound);
 		layer->bias->clear(layer->bias);
 	}
@@ -264,7 +264,7 @@ static void mlp_grad_add(MLPGrad *this, MLPGrad *target)
 		this->layer[i]->add(this->layer[i], target->layer[i]);
 }
 
-static void mlp_grad_scale(MLPGrad *this, double scalar)
+static void mlp_grad_scale(MLPGrad *this, float scalar)
 {
 	for (size_t i = 0; i < this->size; i++)
 		this->layer[i]->scale(this->layer[i], scalar);

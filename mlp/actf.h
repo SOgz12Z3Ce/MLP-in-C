@@ -5,9 +5,9 @@
  * @param  x 自变量
  * @return sigmoid(x)
  */
-static inline double sigmoid(double x)
+static inline float sigmoid(float x)
 {
-	return 1.0 / (1.0 + exp(-x));
+	return 1.0 / (1.0 + expf(-x));
 }
 
 /**
@@ -15,9 +15,9 @@ static inline double sigmoid(double x)
  * @param  x 自变量
  * @return sigmoid'(x)
  */
-static inline double d_sigmoid(double x)
+static inline float d_sigmoid(float x)
 {
-	double sx = sigmoid(x);
+	float sx = sigmoid(x);
 	return sx * (1.0 - sx);
 }
 
@@ -26,7 +26,7 @@ static inline double d_sigmoid(double x)
  * @param  x 自变量
  * @return id(x)
  */
-static inline double id(double x)
+static inline float id(float x)
 {
 	return x;
 }
@@ -36,7 +36,7 @@ static inline double id(double x)
  * @param  x 自变量
  * @return id'(x)
  */
-static inline double d_id(double x)
+static inline float d_id(float x)
 {
 	return 1.0;
 }
@@ -46,7 +46,7 @@ static inline double d_id(double x)
  * @param  x 自变量
  * @return ReLU(x)
  */
-static inline double relu(double x)
+static inline float relu(float x)
 {
 	return x < 0 ? 0 : x;
 }
@@ -56,7 +56,7 @@ static inline double relu(double x)
  * @param  x 自变量
  * @return ReLU'(x)
  */
-static inline double d_relu(double x)
+static inline float d_relu(float x)
 {
 	return x < 0 ? 0 : 1;
 }

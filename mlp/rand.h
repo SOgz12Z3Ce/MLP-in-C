@@ -6,7 +6,7 @@
  * @param  max 最大值
  * @return `[min, max)`中的随机数
  */
-static inline double rand_uniform(double min, double max)
+static inline float rand_uniform(float min, float max)
 {
-	return min + (double)rand() / (RAND_MAX + 1.0) * (max - min);  /* Powered by ChatGPT */
+	return min + (float)rand() / (RAND_MAX + 1.0) * (max - min);  /* Powered by ChatGPT */
 }

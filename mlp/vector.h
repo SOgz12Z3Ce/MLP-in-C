@@ -10,7 +10,7 @@ typedef struct Vector Vector;
 
 struct Vector {
 	size_t size;  /* 长度 */
-	double *val;  /* 值 */
+	float *val;  /* 值 */
 
 	/**
 	 * @brief 销毁`Vector`
@@ -22,7 +22,7 @@ struct Vector {
 	 * @param size 新的长度
 	 * @param val  `[IN]`新的值
 	 */
-	void (*set)(Vector *this, size_t size, double *val);
+	void (*set)(Vector *this, size_t size, float *val);
 
 	/**
 	 * @brief 清空
@@ -34,7 +34,7 @@ struct Vector {
 	 * @param min 最小值
 	 * @param max 最大值
 	 */
-	void (*rand_uniform)(Vector *this, double min, double max);
+	void (*rand_uniform)(Vector *this, float min, float max);
 
 	/**
 	 * @brief 相加
@@ -52,13 +52,13 @@ struct Vector {
 	 * @brief 数乘
 	 * @param scalar 倍率
 	 */
-	void (*scale)(Vector *this, double scalar);
+	void (*scale)(Vector *this, float scalar);
 
 	/**
 	 * @brief 为每一个值作用函数
 	 * @param func 函数
 	 */
-	void (*map)(Vector *this, double (*func)(double));
+	void (*map)(Vector *this, float (*func)(float));
 
 	/**
 	 * @brief  拷贝自身
@@ -91,6 +91,6 @@ struct Vector {
  * @param  val  `[IN]`值，传入`NULL`以令初始值为`0`
  * @return `[OWN]``Vector`指针
  */
-Vector *new_vector(size_t size, double *val);
+Vector *new_vector(size_t size, float *val);
 
 #endif  /* VECTOR_H_ */

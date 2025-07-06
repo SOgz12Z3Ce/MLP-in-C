@@ -30,12 +30,7 @@ int main()
 	srand(time(NULL));
 	Vector **train_image = read_image_file("../mnist/train-images.idx3-ubyte");
 	Vector **train_label = read_label_file("../mnist/train-labels.idx1-ubyte");
-	size_t *queue = rand_queue();
 
-	printf("Training start.\n");
-	printf("Batch size: %d\n", BATCH_SIZE);
-	printf("number of batch(es): %d(drop last)\n\n", BATCH_NUM);
-	
 	FCLayer *hidden_layer_1 = new_fc_layer(layer_size[0], layer_size[1],
 	                                       NULL, NULL, sigmoid, d_sigmoid);
 	FCLayer *hidden_layer_2 = new_fc_layer(layer_size[1], layer_size[2],
@@ -45,10 +40,17 @@ int main()
 	FCLayer *layer[3] = {hidden_layer_1, hidden_layer_2, output_layer};
 	MLPNet *net = new_mlp_net(NET_SIZE - 1, layer,
 	                          mse_loss, d_mse_loss);
+	hidden_layer_1->free(hidden_layer_1);
+	hidden_layer_2->free(hidden_layer_2);
+	output_layer->free(output_layer);
 	MLPGrad *grad_tmp = new_mlp_grad(net);
 	MLPGrad *grad = new_mlp_grad(net);
 	net->init_xavier(net);
 
+	printf("Training start.\n");
+	printf("Batch size: %d\n", BATCH_SIZE);
+	printf("number of batch(es): %d(drop last)\n\n", BATCH_NUM);
+	size_t *queue = rand_queue();
 	for (size_t i = 0; i < BATCH_NUM; i++) {
 		for (size_t j = 0; j < BATCH_SIZE; j++) {
 			size_t index = queue[i * BATCH_SIZE + j];
@@ -64,10 +66,19 @@ int main()
 
 		net->forward(net, train_image[0]);
 		Vector *out = net->layer[net->size - 1]->out;
-		double loss = net->lossf(out, train_label[0]);
+		float loss = net->lossf(out, train_label[0]);
 		printf("[%d / %d] loss: %lf\n", (int)i + 1, BATCH_NUM, loss);
 	}
 	printf("Done.\n\n");
+	for (size_t i = 0; i < TRAIN_SIZE; i++) {
+		train_image[i]->free(train_image[i]);
+		train_label[i]->free(train_label[i]);
+	}
+	free(train_image);
+	free(train_label);
+	grad_tmp->free(grad_tmp);
+	grad->free(grad);
+	free(queue);
 
 	Vector **test_image = read_image_file("../mnist/t10k-images.idx3-ubyte");
 	Vector **test_label = read_label_file("../mnist/t10k-labels.idx1-ubyte");
@@ -81,7 +92,13 @@ int main()
 			correct += 1;
 	}
 	printf("Done.\n");
-	printf("Accuracy: %%%.2lf (%d / %d)\n", (double)correct / TEST_SIZE * 100, correct, TEST_SIZE);
+	printf("Accuracy: %%%.2lf (%d / %d)\n", (float)correct / TEST_SIZE * 100, correct, TEST_SIZE);
+	for (size_t i = 0; i < TEST_SIZE; i++) {
+		test_image[i]->free(test_image[i]);
+		test_label[i]->free(test_label[i]);
+	}
+	free(test_image);
+	free(test_label);
 
 	printf("\n----- end of program -----\n");
 	return 0;
@@ -160,7 +177,7 @@ Vector *read_image(FILE *file, size_t size)
 {
 	Vector *ret = new_vector(size, NULL);
 	for (size_t i = 0; i < size; i++)
-		ret->val[i] = (double)read_uint8(file) / 255;
+		ret->val[i] = (float)read_uint8(file) / 255;
 	return ret;
 }
 
@@ -187,7 +204,7 @@ size_t *rand_queue() {
 
 size_t res(Vector *out)
 {
-	double max = -100.0;
+	float max = -100.0;
 	size_t max_index = 0;
 	for (size_t i = 0; i < out->size; i++) {
 		if (out->val[i] > max) {
